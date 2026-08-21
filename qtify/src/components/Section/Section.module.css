@@ -1,0 +1,31 @@
+.section {
+  padding: 40px 32px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.sectionHeader button {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(159px, 1fr));
+  gap: 24px;
+}
