@@ -1,0 +1,9 @@
+.carousel {
+  width: 100%;
+  padding: 10px 0;
+}
+
+.carousel :global(.swiper-button-prev),
+.carousel :global(.swiper-button-next) {
+  color: var(--color-primary);
+}

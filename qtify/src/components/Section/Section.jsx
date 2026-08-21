@@ -1,44 +1,82 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Tabs, Tab } from "@mui/material";
 import Card from "../Card/Card";
+import Carousel from "../Carousel/Carousel";
 import styles from "./Section.module.css";
 
-function Section() {
+function Section({
+  title,
+  apiEndpoint,
+  data,
+  genres,
+  selectedGenre,
+  setSelectedGenre,
+  isSongSection = false,
+}) {
   const [albums, setAlbums] = useState([]);
-
-  const fetchAlbums = async () => {
-    try {
-      const response = await axios.get(
-        "https://qtify-backend.labs.crio.do/albums/top"
-      );
-      console.log(response.data);
-      setAlbums(response.data);
-    } catch (error) {
-      console.error("Error fetching albums:", error);
-    }
-  };
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
+    if (isSongSection) {
+      return;
+    }
+
+    const fetchAlbums = async () => {
+      try {
+        const response = await axios.get(apiEndpoint);
+        setAlbums(response.data);
+      } catch (error) {
+        console.error("Error fetching albums:", error);
+      }
+    };
+
     fetchAlbums();
-  }, []);
+  }, [apiEndpoint, isSongSection]);
+
+  const sectionData = isSongSection ? data : albums;
 
   return (
     <section className={styles.section}>
       <div className={styles.sectionHeader}>
-        <h2>Top Albums</h2>
-        <button>Collapse</button>
+        <h2>{title}</h2>
+
+        {!isSongSection && (
+          <button onClick={() => setShowAll(!showAll)}>
+            {showAll ? "Collapse" : "Show All"}
+          </button>
+        )}
       </div>
 
-      <div className={styles.cardGrid}>
-        {albums.map((album) => (
-          <Card
-            key={album.id}
-            image={album.image}
-            follows={album.follows}
-            title={album.title}
-          />
-        ))}
-      </div>
+      {isSongSection && (
+        <Tabs
+          value={selectedGenre}
+          onChange={(event, newValue) => setSelectedGenre(newValue)}
+        >
+          {genres.map((genre) => (
+            <Tab
+              key={genre.key}
+              label={genre.label}
+              value={genre.key}
+            />
+          ))}
+        </Tabs>
+      )}
+
+      {isSongSection || !showAll ? (
+        <Carousel data={sectionData} isSongSection={isSongSection} />
+      ) : (
+        <div className={styles.cardGrid}>
+          {sectionData.map((item) => (
+            <Card
+              key={item.id}
+              image={item.image}
+              follows={isSongSection ? item.likes : item.follows}
+              title={item.title}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

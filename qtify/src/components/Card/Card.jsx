@@ -2,7 +2,7 @@ import React from "react";
 import { Chip } from "@mui/material";
 import styles from "./Card.module.css";
 
-function Card({ image, follows, title }) {
+function Card({ image, follows, title, isSong = false }) {
   return (
     <div className={styles.card}>
       <div className={styles.imageContainer}>
@@ -10,7 +10,10 @@ function Card({ image, follows, title }) {
       </div>
 
       <div className={styles.cardContent}>
-        <Chip label={`${follows} Follows`} className={styles.chip} />
+        <Chip
+          label={`${follows} ${isSong ? "Likes" : "Follows"}`}
+          className={styles.chip}
+        />
         <p className={styles.title}>{title}</p>
       </div>
     </div>
