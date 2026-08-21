@@ -7,3 +7,6 @@
   text-align: center;
   gap: 30px;
 }
+.hero h1 {
+  color: white;
+}
